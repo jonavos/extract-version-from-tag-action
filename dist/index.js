@@ -61,6 +61,8 @@ function getLastestTag() {
     return __awaiter(this, void 0, void 0, function* () {
         let tag = "v0.0.0";
         const options = {
+            failOnStdErr: false,
+            ignoreReturnCode: true,
             listeners: {
                 stdout: (data) => {
                     tag = data.toString().trim();
@@ -99,6 +101,8 @@ function formatSemanticValuesFromTag(tag) {
 function getNumberOfCommits() {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
+            failOnStdErr: false,
+            ignoreReturnCode: true,
             listeners: {
                 stdout: (data) => {
                     core.exportVariable(NUMBER_OF_COMMITS, data.toString().trim());
@@ -115,6 +119,8 @@ function getNumberOfCommits() {
 function getNumberOfCommitsSinceTag(tag) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
+            failOnStdErr: false,
+            ignoreReturnCode: true,
             listeners: {
                 stdout: (data) => {
                     core.exportVariable(NUMBER_OF_COMMITS_SINCE_TAG, data.toString().trim());

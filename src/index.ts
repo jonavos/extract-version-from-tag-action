@@ -24,6 +24,8 @@ async function main(): Promise<void> {
 async function getLastestTag(): Promise<string> {
     let tag = "v0.0.0";
     const options: ExecOptions = {
+        failOnStdErr: false,
+        ignoreReturnCode: true,
         listeners: {
             stdout: (data: Buffer) => {
                 tag = data.toString().trim();
@@ -67,6 +69,8 @@ function formatSemanticValuesFromTag(tag: String) {
 
 async function getNumberOfCommits(): Promise<void> {
     const options: ExecOptions = {
+        failOnStdErr: false,
+        ignoreReturnCode: true,
         listeners: {
             stdout: (data: Buffer) => {
                 core.exportVariable(NUMBER_OF_COMMITS, data.toString().trim());
@@ -83,6 +87,8 @@ async function getNumberOfCommits(): Promise<void> {
 
 async function getNumberOfCommitsSinceTag(tag: String): Promise<void> {
     const options: ExecOptions = {
+        failOnStdErr: false,
+        ignoreReturnCode: true,
         listeners: {
             stdout: (data: Buffer) => {
                 core.exportVariable(NUMBER_OF_COMMITS_SINCE_TAG, data.toString().trim());
