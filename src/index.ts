@@ -13,26 +13,16 @@ process.on('unhandledRejection', handleError)
 main().catch(handleError)
 
 async function main(): Promise<void> {
-    try {
+    let tag = await getLastestTag();
+    await getNumberOfCommits();
 
-        let tag = await getLastestTag();
-        if (tag) {
-            await getNumberOfCommits();
+    await getNumberOfCommitsSinceTag(tag);
 
-            await getNumberOfCommitsSinceTag(tag);
-
-            formatSemanticValuesFromTag(tag);
-        } else {
-            core.setFailed(`No valid tag found: ${tag}`)
-        }
-
-    } catch (error) {
-        core.setFailed(error.message);
-    }
+    formatSemanticValuesFromTag(tag);
 }
 
-async function getLastestTag(): Promise<string | undefined> {
-    let tag: string | undefined;
+async function getLastestTag(): Promise<string> {
+    let tag = "v0.0.0";
     const options: ExecOptions = {
         listeners: {
             stdout: (data: Buffer) => {
@@ -42,7 +32,7 @@ async function getLastestTag(): Promise<string | undefined> {
             },
             stderr: (data: Buffer) => {
                 core.error(data.toString().trim());
-                core.setFailed('No tag found on this branch, please verify you have one in your remote repository and the fetch-depth option set to 0, on the checkout action.');
+                core.error('No tag found on this branch, please verify you have one in your remote repository and the fetch-depth option set to 0, on the checkout action. Falling back to v0.0.0.');
             }
         }
     };
@@ -83,7 +73,7 @@ async function getNumberOfCommits(): Promise<void> {
             },
             stderr: (data: Buffer) => {
                 core.error(data.toString());
-                core.setFailed('Unable to get the number of commits. See error above.');
+                core.error('Unable to get the number of commits. See error above.');
             }
         }
     };
@@ -99,7 +89,7 @@ async function getNumberOfCommitsSinceTag(tag: String): Promise<void> {
             },
             stderr: (data: Buffer) => {
                 core.error(data.toString());
-                core.setFailed('Unable to get the number of commits since this tag. See error above.');
+                core.error('Unable to get the number of commits since this tag. See error above.');
             }
         }
     };
