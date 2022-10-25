@@ -33,8 +33,7 @@ async function getLastestTag(): Promise<string> {
                 core.info(`Tag retreived: ${tag}`);
             },
             stderr: (data: Buffer) => {
-                core.error(data.toString().trim());
-                core.error('No tag found on this branch, please verify you have one in your remote repository and the fetch-depth option set to 0, on the checkout action. Falling back to v0.0.0.');
+                core.warning('No tag found on this branch, please verify you have one in your remote repository and the fetch-depth option set to 0, on the checkout action. Falling back to v0.0.0.\n' + data.toString().trim());
             }
         }
     };
@@ -76,8 +75,7 @@ async function getNumberOfCommits(): Promise<void> {
                 core.exportVariable(NUMBER_OF_COMMITS, data.toString().trim());
             },
             stderr: (data: Buffer) => {
-                core.error(data.toString());
-                core.error('Unable to get the number of commits. See error above.');
+                core.warning('Unable to get the number of commits. See error below.\n' + data.toString());
             }
         }
     };
@@ -94,8 +92,7 @@ async function getNumberOfCommitsSinceTag(tag: String): Promise<void> {
                 core.exportVariable(NUMBER_OF_COMMITS_SINCE_TAG, data.toString().trim());
             },
             stderr: (data: Buffer) => {
-                core.error(data.toString());
-                core.error('Unable to get the number of commits since this tag. See error above.');
+                core.warning('Unable to get the number of commits since this tag. See error below.\n' + data.toString());
             }
         }
     };
